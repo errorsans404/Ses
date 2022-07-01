@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/turquoise"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/avt"
+        android:textColor="@color/textback"
+        android:textSize="30sp" />
+
+    <FrameLayout
+        android:layout_width="300dp"
+        android:layout_height="600dp"
+        android:layout_centerInParent="true"
+        android:background="@color/textback">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="100dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/log"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="150dp"
+            android:autofillHints="name"
+            android:background="@color/white"
+            android:inputType="text"
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="210dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/pas"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/pas"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="260dp"
+            android:autofillHints="name"
+            android:background="@color/white"
+            android:inputType="text"
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/ent"
+            android:layout_width="170dp"
+            android:layout_height="70dp"
+            android:layout_marginHorizontal="65sp"
+            android:layout_marginVertical="350sp"
+            android:backgroundTint="@color/turquoise"
+            android:text="@string/ent"
+            android:textColor="@color/neebu"
+            android:textSize="18sp" />
+
+         <Button
+            android:id="@+id/reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reg"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginHorizontal="77sp"
+            android:layout_marginTop="430dp"/>
+
+        <Button
+            android:id="@+id/clin"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="100sp"
+            android:layout_marginTop="500dp"
+            android:backgroundTint="@color/turquoise"
+            android:text="@string/clin"
+            android:textColor="@color/neebu"
+            android:textSize="11sp" />
+
+
+    </FrameLayout>
+
+</RelativeLayout>

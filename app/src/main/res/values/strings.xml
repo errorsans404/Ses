@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Ses</string>
+    <string name="avt">Авторизация</string>
+    <string name="ent">Войти</string>
+    <string name="reg">Регистрация</string>
+    <string name="login">Логин или почта</string>
+    <string name="pas">Пароль</string>
+    <string name="clin">Очистить</string>
+    <string name="zareg">Зарегистрироваться</string>
+    <string name="zad">Назад</string>
+    <string name="xyi">Вы хотите соснуть хуйца?</string>
+</resources>
