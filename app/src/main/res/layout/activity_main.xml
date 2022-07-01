@@ -71,8 +71,9 @@
             android:layout_marginVertical="350sp"
             android:backgroundTint="@color/turquoise"
             android:text="@string/ent"
-            android:textColor="@color/neebu"
-            android:textSize="18sp" />
+            android:textColor="#004D40"
+            android:textSize="18sp"
+            tools:ignore="TextContrastCheck" />
 
          <Button
             android:id="@+id/reg"
@@ -92,7 +93,15 @@
             android:backgroundTint="@color/turquoise"
             android:text="@string/clin"
             android:textColor="@color/neebu"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            tools:ignore="TextContrastCheck" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/frame__5_"
+            android:layout_marginHorizontal="100dp"
+            android:contentDescription="@string/todo" />
 
 
     </FrameLayout>
