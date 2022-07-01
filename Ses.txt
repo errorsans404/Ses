@@ -1,0 +1,183 @@
+Класс DbCon в папке Controller --------------------------------- 
+public static Model.TeatrEntities s_firstDBEntities;
+
+        public static Model.TeatrEntities GetContext()
+        {
+            if (s_firstDBEntities == null)
+            {
+                s_firstDBEntities = new Model.TeatrEntities();
+            }
+            return s_firstDBEntities;
+        }
+-----------------------------------------------
+ComboBox:
+<ComboBox Name="teatr" HorizontalAlignment="Left" Margin="307,28,0,0" VerticalAlignment="Top" Width="190">
+            <TextBlock><Run Text="Глобус"/></TextBlock>
+            <TextBlock><Run Text="Оперы и балета"/></TextBlock>
+        </ComboBox>
+
+
+Добавление записей в БД (писать в кнопку):
+		Model.TeatrEntities teatrEntities = new Model.TeatrEntities(); Создание клона базы данных
+            Model.Vistuplenie vistuplenie = new Model.Vistuplenie(); Создание клона таблицы
+            Model.TeatrEntities dbCon = Controller.DbCon.GetContext(); Создание подключения к базе
+            var teatrid = dbCon.Teatr.Where(x => x.Name == teatr.Text).Select(x => x.idTeatra).FirstOrDefault(); Запрос на поиск id по имени, выбранном в combobox
+            var spectid = dbCon.Spectacl.Where(x => x.Name == spect.Text).Select(x => x.idSpectacl).FirstOrDefault(); Запрос на поиск id по имени, выбранном в combobox
+            vistuplenie.idTeatr = Convert.ToInt64(teatrid); добавление id в базу (bigint)
+            vistuplenie.idSpectacl = Convert.ToInt64(spectid); добавление id в базу (bigint)
+            vistuplenie.Date = Convert.ToDateTime(date.Text); добавление даты и времени в базу ДД.ММ.ГГГГ ЧЧ:ММ (datetime)
+            vistuplenie.Count = Convert.ToInt32(count.Text); добавление цены в базу (money)
+            vistuplenie.HallNumber = Convert.ToInt32(hall.Text); добавление номера в базу (int)
+            vistuplenie.BiletCountMax = Convert.ToInt32(biletcount.Text); Добавление количества в базу (int)
+            teatrEntities.Vistuplenie.Add(vistuplenie); (Добавление всего что было добавлено выше в настоящую таблицу
+            teatrEntities.SaveChanges(); Сохранение изменений
+ 
+            MessageBox.Show("Данные занесены"); появление сообщения об успешном добавлении
+
+---------------------------------------------------------
+Получение записей из БД:
+Вариант для получения id по имени. Можно подставлять другие колонки
+var teatrid = dbCon.Teatr.Where(x => x.Name == teatr.Text).Select(x => x.idTeatra).FirstOrDefault();
+Вариант для получения первого id из Таблицы
+var teatrid = dbCon.Teatr.Select(x => x.idTeatra).FirstOrDefault();
+
+Для вывода записи в TextBlock:
+
+ private void Sivod()
+        {
+            Model.practikaEntities practikaEntities = new Model.practikaEntities();
+            var xui = practikaEntities.Polomka.Select(x => x.ТипПоломки);                       //выод в textblock
+            string papa = xui.ToArray()[0].ToString();
+            Vivod.Text = papa;
+
+        }
+
+----------------------------------------
+В случае если будет нужен DataGrid для вывода таблицы с данными и поиск, это писать в .xaml:
+<Grid Margin="0,29,0,0">
+        <DataGrid x:Name="dgAwtobus"
+                  Width="1343"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="True"
+                  ColumnWidth="*" Height="420" Margin="0,59,0,0" (SelectionChanged="dgAwtobus_SelectionChanged"(если ошибка стереть))>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="idawt"
+                                   Binding="{Binding idAwtobus}"
+                                    Header="idAwtobus"
+                                    IsReadOnly="True"
+                                    Width="67"/>
+                <DataGridTextColumn x:Name="fModAwt"
+                                   Binding="{Binding МодельАвтобуса}"
+                                    Header="Модель автобуса"
+                                    IsReadOnly="True"
+                                    Width="106"/>
+                <DataGridTextColumn x:Name="DataWipuska"
+                                    Binding="{Binding ДатаВыпуска}"
+                                    Header="Дата Выпуска"
+                                    IsReadOnly="True" 
+                                    Width="86"/>
+                <DataGridTextColumn x:Name="GosNom"
+                                    Binding="{Binding ГосударственныйНомер }"
+                                    Header="Государственный номер"
+                                    IsReadOnly="True"
+                                    Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Меню" HorizontalAlignment="Left" Margin="1140,500,0,0" VerticalAlignment="Top" Height="40" Width="146" Click="Button_Click" FontSize="24" FontFamily="Consolas">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        
+        <Label Content="Автобусы" HorizontalAlignment="Center" Margin="0,-20,0,0" VerticalAlignment="Top" FontSize="48" FontFamily="Magneto"/>
+        <TextBox x:Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged" HorizontalAlignment="Left" Margin="132,506,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274" FontSize="36" Padding="0,0,0,0" Background="#FFF1F1F1">
+            <TextBox.Effect>
+                <DropShadowEffect/>
+            </TextBox.Effect>
+        </TextBox>
+        <TextBlock HorizontalAlignment="Left" Margin="10,500,0,0" TextWrapping="Wrap" Text="Поиск" VerticalAlignment="Top" FontSize="36"/>
+    </Grid>
+---------------------------------------
+А это в .xaml.css (Кнопка не нужна):
+Найдешь в коде строку InitializeComponent() и пишешь эти две строчки после него.
+public MainWindow()
+        {
+            InitializeComponent();
+		dgAwtobus.ItemsSource = Controller.DbConnection.GetContext().Awtobus.ToList();
+		UpdateAwtobus();
+        }
+
+Это писать вне фигурных скобок, в которых писали строки выше:
+
+private void UpdateAwtobus()
+        {
+            var currentTours = Controller.DbConnection.GetContext().Awtobus.ToList();
+            currentTours = currentTours.Where(p => p.ГосударственныйНомер.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+            dgAwtobus.ItemsSource = currentTours.OrderBy(p => p.idAwtobus).ToList();
+        }
+private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateAwtobus();
+        }
+
+-----------------------------------------
+Код для тестов:
+
+[TestMethod]
+        public void ConnectionTestMethod()
+        {
+            //Вызов метода создания экземпляра базы и проверка существования подключения
+            Model.TeatrEntities dbCon = Controller.DbConTest.GetContext();
+            if(dbCon.Database.Exists())
+            {
+
+            }
+            else
+            {
+                int[] i = new int[2];
+                i[4] = 2;
+            }
+        }
+
+        [TestMethod]
+        public void AddTestMethod()
+        {
+            //ПРоверка на добавление записей в БД
+            Model.TeatrEntities teatrEntities = new Model.TeatrEntities();
+            Model.Vistuplenie vistuplenie = new Model.Vistuplenie();
+            Model.TeatrEntities dbCon = Controller.DbConTest.GetContext();
+            var teatrid = dbCon.Teatr.Where(x => x.Name == "Глобус").Select(x => x.idTeatra).FirstOrDefault();
+            var spectid = dbCon.Spectacl.Where(x => x.Name == "Алые паруса").Select(x => x.idSpectacl).FirstOrDefault();
+            vistuplenie.idTeatr = Convert.ToInt64(teatrid);
+            vistuplenie.idSpectacl = Convert.ToInt64(spectid);
+            vistuplenie.Date = Convert.ToDateTime("16.06.2022");
+            vistuplenie.Count = Convert.ToInt32("500");
+            vistuplenie.HallNumber = Convert.ToInt32("2");
+            vistuplenie.BiletCountMax = Convert.ToInt32("500");
+            teatrEntities.Vistuplenie.Add(vistuplenie);
+            teatrEntities.SaveChanges();
+        }
+
+        [TestMethod]
+        //Проверка валидации данных
+        public void ValidateTestMethod()
+        {
+            Model.TeatrEntities teatrEntities = new Model.TeatrEntities();
+            Model.Vistuplenie vistuplenie = new Model.Vistuplenie();
+            Model.TeatrEntities dbCon = Controller.DbConTest.GetContext();
+
+            var teatrid = dbCon.Teatr.Where(x => x.Name == "Глобус").Select(x => x.idTeatra).FirstOrDefault();
+            var spectid = dbCon.Spectacl.Where(x => x.Name == "Алые паруса").Select(x => x.idSpectacl).FirstOrDefault();
+            vistuplenie.idTeatr = Convert.ToInt64(teatrid);
+            vistuplenie.idSpectacl = Convert.ToInt64(spectid);
+            vistuplenie.Date = Convert.ToDateTime("dfgdgd");
+            vistuplenie.Count = Convert.ToInt32("ggg");
+            vistuplenie.HallNumber = Convert.ToInt32("2");
+            vistuplenie.BiletCountMax = Convert.ToInt32("500");
+            teatrEntities.Vistuplenie.Add(vistuplenie);
+            teatrEntities.SaveChanges();
+
+        }
