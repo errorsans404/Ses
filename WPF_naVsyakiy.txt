@@ -1,0 +1,219 @@
+ПАПКА Controller + создать класс (DbConnection.cs)
+в интерал класс прописать +++
+
+private static Model.inskouEntities5 s_firstDBEntities;
+
+        public static Model.inskouEntities5 GetContext()
+        {
+            if (s_firstDBEntities == null)
+            {
+                s_firstDBEntities = new Model.inskouEntities5();
+            }
+            return s_firstDBEntities;
+        }
+    }
++++
+
+
+ ДАТА ГРИД xaml +++ 
+<DataGrid x:Name="dgSotrud"  
+                Width="780"  
+                HorizontalAlignment="Center"  
+                VerticalAlignment="Top"  
+                AutoGenerateColumns="False"  
+                CanUserAddRows="False"  
+                CanUserDeleteRows="True"  
+                ColumnWidth="*" Height="249" FontSize="14" Margin="0,10,0,0" HorizontalGridLinesBrush="#FF8C0A3E" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                <DataGridTextColumn x:Name="dgrEmpId"  
+                                    Binding="{Binding idPrepod}"  
+                                    Header="id"  
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="dgrFirstName"  
+                                    Binding="{Binding Surname}"  
+                                    Header="Фамилия" 
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="dgrLastName"  
+                                    Binding="{Binding Name}" 
+                                    Header="Имя"   
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="dgrEmpI"  
+                                    Binding="{Binding Otchestvo}"  
+                                    Header="Отчество"  
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="dgrEmpI1"  
+                                    Binding="{Binding Date}"  
+                                    Header="Дата рождения"  
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="dgrEmpI2"  
+                                    Binding="{Binding Numberphone}"  
+                                    Header="Номер телефона"  
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="dgrEmpI3"  
+                                    Binding="{Binding Adress}"  
+                                    Header="Адрес"  
+                                    IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
++++
+
+
+
+Для подключения +++
+InitializeComponent();
+dgSotrud.ItemsSource = Controller.DbConnection.GetContext().Prepod.ToList(); 
++++
+
+ПОИСК +++
+xaml
+ <TextBox x:Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged"  HorizontalAlignment="Left" Margin="516,340,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="248" Cursor="Arrow" Height="45"  FontSize="14" />
+код 
+ private void UpdateSotr()
+        {
+            var currentTours = Controller.DbConnection.GetContext().Prepod.ToList();
+            currentTours = currentTours.Where(p => p.Surname.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+            dgSotrud.ItemsSource = currentTours.OrderBy(p => p.idPrepod).ToList();
+        }
+        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateSotr();
+        }
++++
+
+
+ДОБАВЛЕНИЕ В БАЗУ комбо бокс и тд +++
+xaml 
+ <ComboBox x:Name="combobox14" Text="sgsd" BorderBrush="Black" Height="36" Margin="144,475,1094,0" VerticalAlignment="Top" Foreground="Black"  >
+            <TextBlock Text="Да"/>
+            <TextBlock Text="Нет"/>
+        </ComboBox>
+<TextBox x:Name="textbox3" HorizontalAlignment="Left" Margin="87,353,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+
+код
+для добавление код пишем в бтн клик 
+Model.inskouEntities7 DB = new Model.inskouEntities7();
+            Model.Prepod sotrudnik = new Model.Prepod();
+            sotrudnik.Name = textbox3.Text;
+            sotrudnik.Surname = textbox4.Text;   /orders.Time = Convert.ToDateTime(textbox2.Text);(ДАТА)/
+            DB.Prepod.Add(sotrudnik);
+            DB.SaveChanges();
+                                                 (если нужно закрыть страницу)
+ View.Windows.Menu emp = new View.Windows.Menu();
+            emp.Show();
+            this.Close();
+
++++
+
+АВТОРИЗАЦИЯ КРУТАЯ (техт бох) и убрать весь текст  +++
+
+              InitializeComponent();
+        }
+
+        public string strLoginUsers;
+        public string strPasswordUsers;
+
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Model.inskouEntities7 dbCon = Controller.DbConnection.GetContext();
+            strPasswordUsers = TextBoxPassword.Password;
+            strLoginUsers = TextBoxLogin.Text;
+            TextBoxLogin.ToolTip = null;           
+            TextBoxPassword.ToolTip = null;
+           
+            if (strLoginUsers == null & strPasswordUsers != null)
+            {
+                TextBoxLogin.ToolTip = "Неверный логин";
+                
+                MessageBox.Show("Неверный логин");
+
+            }
+
+
+            if (!string.IsNullOrEmpty(strLoginUsers) && !string.IsNullOrEmpty(strPasswordUsers))
+            {
+                if (!string.IsNullOrEmpty(strLoginUsers) && !string.IsNullOrEmpty(strPasswordUsers))
+                {
+                    var findUsersAccount = dbCon.User.Where(x => x.Login == strLoginUsers && x.Password == strPasswordUsers).FirstOrDefault();
+                    if (findUsersAccount != null)
+                    {
+                        View.Windows.Menu taskWindow = new View.Windows.Menu();
+                        taskWindow.Show();
+                        this.Close();
+                        MessageBox.Show("ти вашол");
+                    }
+
+                }
+                if (!string.IsNullOrEmpty(strLoginUsers) && !string.IsNullOrEmpty(strPasswordUsers))
+                {
+                    var proverkalogin = dbCon.User.Where(x => x.Login == strLoginUsers).FirstOrDefault();
+                    var proverkaPassword = dbCon.User.Where(x => x.Password == strPasswordUsers).FirstOrDefault();
+                    if (proverkalogin == null)
+                    {
+                        TextBoxLogin.ToolTip = "Неверный логин";
+                       
+                        MessageBox.Show("Неверный логин");
+                    }
+                    if (proverkaPassword == null)
+                    {
+                        TextBoxPassword.ToolTip = "Неверный пароль";
+                        
+                        MessageBox.Show("Неверный пароль");
+                    }
+
+
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Введите все данные");
+            }
+
+        }
+
+
+ TextBoxPassword.Clear();
+ TextBoxLogin.Clear();
++++
+
+
+УДАЛЕНИЕ СЛОЖНА 
+xaml
+1- <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnDelete"  Background="#FF8C0A3E" BorderBrush="#FF8C0A3E" Height="32" Width="100" 
+                                    Click="btnDelete_Click"  
+                                    Content="Удалить" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+код
+ 
+2-  public partial class Window5 : Window
+    {
+        Model.inskouEntities7 objEntities = new Model.inskouEntities7();    ------------ это писать
+
+
+3- private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgSotrud.ItemsSource = objEntities.Prepod.ToList();
+        }
+
+
+4-private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrepod = (dgSotrud.SelectedItem as Prepod).idPrepod;
+            Prepod prepod = (from r in objEntities.Prepod where r.idPrepod == idPrepod select r).SingleOrDefault();
+            objEntities.Prepod.Remove(prepod);
+            objEntities.SaveChanges();
+            dgSotrud.ItemsSource = objEntities.Prepod.ToList();
+        }
+
+5- using inskoy.Model;
+
+
