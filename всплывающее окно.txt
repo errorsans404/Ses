@@ -1,0 +1,88 @@
+В ПАПКЕ res СОЗДАТЬ directory С ИМЕНЕМ menu
+ВНУТРИ menu СОЗДАТЬ С КАРТИНКОЙ КАК У activity_main
+НАЗВАТЬ popupmenu
+
+ВНУТРИ menu ВСТАВИТЬ:
+
+<group android:id="@+id/menugroup1" >
+        <item
+            android:id="@+id/menu1"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Popup menu item 1"/>
+        <item
+            android:id="@+id/menu2"
+            android:title="Popup menu item 2"/>
+        <item
+            android:id="@+id/menu3"
+            android:title="Popup menu item 3">
+            <menu>
+                <item
+                    android:id="@+id/submenu"
+                    android:title="Подменю"/>
+            </menu>
+        </item>
+    </group>
+    <group android:id="@+id/menugroup2" >
+        <item
+            android:id="@+id/menu4"
+            android:checkable="true"
+            android:checked="true"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Popup menu item 4"/>
+        <item
+            android:id="@+id/menu5"
+            android:title="Popup menu item 5"
+            android:enabled="false"/>
+        <item
+            android:id="@+id/menu6"
+            android:title="Popup menu item 6"/>
+    </group>
+
+------------------------------------------------------------
+
+Для activity main ПРОПИСАТЬ:
+
+showPopupMenu(v); - ВНУТРИ КНОПКИ
+
+=======
+
+ОТДЕЛЬНО: 
+
+private void showPopupMenu(View v) {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.popupmenu);
+
+        popupMenu
+                .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu1:
+                                Toast.makeText(getApplicationContext(),
+                                        "Вы выбрали PopupMenu 1",
+                                        Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.menu2:
+                                Toast.makeText(getApplicationContext(),
+                                        "Вы выбрали PopupMenu 2",
+                                        Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.menu3:
+                                Toast.makeText(getApplicationContext(),
+                                        "Вы выбрали PopupMenu 3",
+                                        Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                Toast.makeText(getApplicationContext(), "onDismiss",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        popupMenu.show();
