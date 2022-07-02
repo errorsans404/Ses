@@ -14,28 +14,8 @@
             android:title="Popup menu item 2"/>
         <item
             android:id="@+id/menu3"
-            android:title="Popup menu item 3">
-            <menu>
-                <item
-                    android:id="@+id/submenu"
-                    android:title="Подменю"/>
-            </menu>
+	android:title="@string/add_widget">
         </item>
-    </group>
-    <group android:id="@+id/menugroup2" >
-        <item
-            android:id="@+id/menu4"
-            android:checkable="true"
-            android:checked="true"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Popup menu item 4"/>
-        <item
-            android:id="@+id/menu5"
-            android:title="Popup menu item 5"
-            android:enabled="false"/>
-        <item
-            android:id="@+id/menu6"
-            android:title="Popup menu item 6"/>
     </group>
 
 ------------------------------------------------------------
@@ -46,9 +26,8 @@ showPopupMenu(v); - ВНУТРИ КНОПКИ
 
 =======
 
-ОТДЕЛЬНО: 
+ОТДЕЛЬНО ВНУТРИ showPopupMenu: 
 
-private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.inflate(R.menu.popupmenu);
 
@@ -56,7 +35,7 @@ private void showPopupMenu(View v) {
                 .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
+                        switch (menuItem.getItemId()) {
                             case R.id.menu1:
                                 Toast.makeText(getApplicationContext(),
                                         "Вы выбрали PopupMenu 1",
